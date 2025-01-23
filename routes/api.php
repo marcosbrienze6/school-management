@@ -3,7 +3,6 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TaskController;
 
 Route::get('/testapi', function () {
     return response()->json(['message' => 'passou']);
@@ -20,7 +19,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/password/reset-request', [AuthController::class, 'sendResetEmail']);
     Route::post('/password/reset', [AuthController::class, 'resetPassword']);
 });
-Route::prefix('users')->group(function () {
+Route::prefix('user')->group(function () {
     Route::post('/', [UserController::class, 'create']);
     Route::get('/', [UserController::class, 'index']);
 });

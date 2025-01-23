@@ -16,20 +16,17 @@ class UserRequest extends FormRequest
         if ($this->isMethod('post')) {
             return [
                 'name' => 'required|string|max:255',
-                'email' => 'required|string|email|unique:users,email',
+                'email' => 'required|string|email|unique:user,email',
                 'password' => 'required|string|min:6',
                 'cpf' => 'required|numeric',
-                'address' => 'nullable|string|max:255',
-                'phone_number' => 'sometimes'
+                'address' => 'nullable|string|max:255',   
             ];
         } elseif ($this->isMethod('put') || $this->isMethod('patch')) {
             return [
                 'name' => 'sometimes|string|max:255',
                 'email' => 'sometimes|string|email|unique:users,email,' . $this->user->id,
                 'password' => 'nullable|string|min:6',
-                
                 'address' => 'nullable|string|max:255',
-                'phone_number' => 'sometimes'
             ];
         }
 

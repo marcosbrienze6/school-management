@@ -4,36 +4,43 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\User;
 
 class UserController extends Controller
 {
-
     protected $modelInstance;
 
-    public function __construct(User $modelInstance) {
+    public function __construct(User $user) {
       
-        $this->modelInstance = $modelInstance;
-
+        $this->modelInstance = $user;
     }
 
     public function index()
     {
         return response()->json(User::all());
     }
-
-    public function create(UserRequest $request)
+    
+    public function create(Request $request)
     {
-        $user = $this->modelInstance->create($request->validated());
+        $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|unique:user,email',
+        'password' => 'required|string|min:6',
+        'cpf' => 'required|numeric',
+        'address' => 'nullable|string|max:255',
+        ]);
 
+        $user = User::create($data);
+       
         return response()->json([
         'message' => 'Usuário criado com sucesso.',
-        'user' => $user], 201);
+        'user' => $user
+        ]);
     }   
 
-
-    public function update(UserRequest $request)
+    public function update(Request $request)
     {
         $user = $this->modelInstance->update($request->validated());
 

@@ -13,6 +13,8 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
 
+    protected $table = 'user';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +24,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'cpf',
+        'address',
+        'user_role_id',
+        'phone_number'
     ];
 
     /**
@@ -46,4 +52,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function roles()
+{
+    return $this->belongsTo(UserRole::class, 'user_role_id');
+}
 }
