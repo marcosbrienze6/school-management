@@ -16,20 +16,17 @@ class DefaultUserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'cpf' => '12345678901',
-            'password' => bcrypt('password'),
-            'user_role_id' => 1, // Associando ao papel "Admin"
-        ]);
+        $seeds = [
+            [
+                'name' => 'Admin User',
+                'email' => 'admin@email.com',
+                'cpf' => '1234567890',
+                'password' => Hash::make('password123')
+            ]
+        ];
 
-        User::create([
-            'name' => 'Regular User',
-            'email' => 'user@example.com',
-            'cpf' => '09876543210',
-            'password' => bcrypt('password'),
-            'user_role_id' => 2, // Associando ao papel "User"
-        ]);
+        foreach ($seeds as $seed) {
+            User::firstOrCreate($seed);
+        }
     }
 }

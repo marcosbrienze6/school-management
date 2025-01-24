@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('cpf');
+            $table->string('cpf')->unique();
             $table->string('password');
             $table->string('address')->nullable();
-            $table->foreignId('user_role_id')->constrained('user_role');
-         
+            $table->integer('user_role_id');
             $table->softDeletes();
             $table->timestamps();
         });

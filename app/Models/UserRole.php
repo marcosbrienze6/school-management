@@ -15,8 +15,8 @@ class UserRole extends Model
         'role'
     ];
 
-    public function user()
-    {
-        return $this->hasMany(User::class, 'user_role_id');
-    }
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }

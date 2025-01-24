@@ -19,8 +19,10 @@ Route::prefix('auth')->group(function () {
     Route::post('/password/reset-request', [AuthController::class, 'sendResetEmail']);
     Route::post('/password/reset', [AuthController::class, 'resetPassword']);
 });
+
+
 Route::prefix('user')->group(function () {
-    Route::post('/', [UserController::class, 'create']);
+    Route::post('/create', [UserController::class, 'create']);
     Route::get('/', [UserController::class, 'index']);
 });
 

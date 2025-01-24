@@ -13,14 +13,17 @@ class UserRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        UserRole::create(['role' => 'Director']);
-        UserRole::create(['role' => 'Coordinator']);
-        UserRole::create(['role' => 'Teacher']);
-        UserRole::create(['role' => 'Student']);
-        UserRole::create(['role' => 'Doorman']);
-        UserRole::create(['role' => 'Cleaning']);
-        UserRole::create(['role' => 'Kitchen']);
-        UserRole::create(['role' => 'Employee']);
+        $seeds = [
+            ['role' => 'Director'],
+            ['role' => 'Teacher'],
+            ['role' => 'Student'],
+            ['role' => 'Parent'],
+            ['role' => 'Employee']
+        ];
+
+        foreach ($seeds as $seed) {
+            UserRole::firstOrCreate($seed);
+        }
 
     }
 }

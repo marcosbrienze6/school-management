@@ -13,23 +13,13 @@ class UserRequest extends FormRequest
 
     public function rules()
     {
-        if ($this->isMethod('post')) {
-            return [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|unique:user,email',
-                'password' => 'required|string|min:6',
-                'cpf' => 'required|numeric',
-                'address' => 'nullable|string|max:255',   
-            ];
-        } elseif ($this->isMethod('put') || $this->isMethod('patch')) {
-            return [
-                'name' => 'sometimes|string|max:255',
-                'email' => 'sometimes|string|email|unique:users,email,' . $this->user->id,
-                'password' => 'nullable|string|min:6',
-                'address' => 'nullable|string|max:255',
-            ];
-        }
-
-        return [];
+        return [
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:user',
+        'password' => 'required|string|min:8',
+        'cpf' => 'required|digits:11|unique:user',
+        'address' => 'nullable|string|max:255',
+        'user_role_id' => 'numeric|exists:user_role,id',   
+        ];  
     }
 }
