@@ -22,7 +22,7 @@ class UserController extends Controller
 
         $user = User::create($data);
 
-        return response()->json(['message' => 'deu certo pai', 'user' => $user]);
+        return response()->json(['message' => 'Usuário criado com sucesso.', 'user' => $user]);
     } 
 
 }

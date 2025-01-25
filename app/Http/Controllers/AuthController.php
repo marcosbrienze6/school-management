@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -92,14 +93,26 @@ class AuthController extends Controller
     public function update(UpdateUserRequest $request)
     {
         $user = Auth::user();
-        $user->update(array_filter($request->validated()));
+        if (!$user) {
+            return response()->json(['error' => true, 'message' => 'Usuário não autenticado.'], 401);
+        }
 
-        return response()->json(['success' => true, 'message' => 'Usuário atualizado com sucesso.', 'user' => $user]);
+        $user->update($request->validated());
+
+        return response()->json([
+        'error' => false,
+        'message' => 'Usuário atualizado com sucesso.',
+        'user' => $user,
+        ]);
     }
 
     public function delete()
     {
-        Auth::user()->delete();
+       $user = Auth::user();
+        if (!$user) {
+            return response()->json(['error' => true, 'message' => 'Usuário não autenticado.'], 401);
+        }
+        $user->delete();
         return response()->json(['success' => true, 'message' => 'Usuário deletado com sucesso.']);
     }
 }
