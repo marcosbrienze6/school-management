@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
-use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\PasswordMail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -53,15 +53,17 @@ class AuthController extends Controller
         }
 
         $token = base64_encode(Str::random(40) . '|' . now()->addMinutes(30));
-        $data = [
-        'title' => 'Redefinição de Senha',
-        'body' => 'Clique no link abaixo para redefinir sua senha.',
-        'link' => url("/api/auth/password/reset?token=" . urlencode($token))
-        ];
+        $data = new \stdClass();
+        $data->title = 'Redefinição de Senha';
+        $data->body = 'Clique no link abaixo para redefinir sua senha.';
+        $data->link = url("/api/auth/password/reset?token=" . urlencode($token));
 
-        Mail::send('emailTest', compact('data'), fn($message) => $message->to($email)->subject('Recuperação de Senha'));
-
-        return response()->json(['success' => true, 'message' => 'E-mail de recuperação enviado!']);
+        try {
+            Mail::to($email)->send(new PasswordMail($data));
+            return response()->json(['success' => true, 'message' => 'E-mail de recuperação enviado!']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Falha ao enviar o e-mail.', 'details' => $e->getMessage()], 500);
+        }
     }
 
     public function resetPassword(Request $request)

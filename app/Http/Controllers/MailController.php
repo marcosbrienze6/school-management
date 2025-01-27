@@ -31,7 +31,7 @@ class MailController extends Controller
             return response()->json(['error' => 'Tipo de email inválido.'], 400);
         }
 
-        Mail::send('abandonedCart', ['data' => $data], function ($message) use ($data) {
+        Mail::send('testEmail', ['data' => $data], function ($message) use ($data) {
             $message->to($data['recipient'])->subject($data['title']);    
         });
     
