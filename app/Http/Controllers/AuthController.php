@@ -52,11 +52,12 @@ class AuthController extends Controller
             return response()->json(['error' => 'E-mail não encontrado.'], 404);
         }
 
-        $token = base64_encode(Str::random(40) . '|' . now()->addMinutes(30));
+        $expiry = now()->addMinutes(60)->timestamp;
+        $token = base64_encode("{$user->email}|{$expiry}|".Str::random(32));
         $data = new \stdClass();
         $data->title = 'Redefinição de Senha';
         $data->body = 'Clique no link abaixo para redefinir sua senha.';
-        $data->link = url("/api/auth/password/reset?token=" . urlencode($token));
+        $data->link = url("http://localhost:5173/password-reset?token=" . urlencode($token));
 
         try {
             Mail::to($email)->send(new PasswordMail($data));
@@ -70,17 +71,18 @@ class AuthController extends Controller
     {
         $token = $request->input('token');
         $newPassword = $request->input('password');
-
+ 
         try {
-            [$randomString, $expiry] = explode('|', base64_decode($token));
-            if (now() > $expiry) {
-                return response()->json(['error' => 'Token expirado.'], 400);
+            [$email, $expiry, $randomString] = explode('|', base64_decode($token));
+
+            if (now()->timestamp > $expiry) {
+            return response()->json(['error' => 'Token expirado.'], 400);
             }
         } catch (\Exception $e) {
             return response()->json(['error' => 'Token inválido.'], 400);
         }
 
-        $user = User::where('email', $request->input('email'))->first();
+        $user = User::where('email', $email)->first();
 
         if (!$user) {
             return response()->json(['error' => 'Usuário não encontrado.'], 404);
@@ -89,7 +91,19 @@ class AuthController extends Controller
         $user->update(['password' => Hash::make($newPassword)]);
 
         return response()->json([
-        'success' => true, 'message' => 'Senha redefinida com sucesso.']);
+        'success' => true, 
+        'message' => 'Senha redefinida com sucesso.'
+        ]);
+    }
+
+    public function myProfile()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['error' => true, 'message' => 'Usuário não autenticado.'], 401);
+        }
+
+        return response()->json(['user' => $user]);
     }
 
     public function update(UpdateUserRequest $request)

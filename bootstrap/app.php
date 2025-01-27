@@ -4,7 +4,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Http\Middleware\CorsMiddleware;
+
 use Illuminate\Validation\ValidationException;
+
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -15,7 +18,6 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function ($middleware) {
-        //
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (Throwable $exception, Request $request) {
