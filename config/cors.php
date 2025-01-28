@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['GET, POST, PUT, OPTIONS'],
 
-    'allowed_origins' => ['http://127.0.0.1:5173/api/auth/my-profile'],
+    'allowed_origins' => ['http://127.0.0.1:5173/api'],
 
     'allowed_origins_patterns' => [],
 

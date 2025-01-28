@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PasswordMail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -104,6 +105,28 @@ class AuthController extends Controller
         }
 
         return response()->json(['user' => $user]);
+    }
+
+    public function updateProfilePicture(Request $request)
+    {
+        $request->validate([
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        $user = Auth::user();
+
+        if ($request->hasFile('profile_picture')) {
+            // Excluir a imagem antiga, se existir
+            if ($user->profile_picture) {
+                Storage::delete($user->profile_picture);
+            }
+    
+        $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+        $user->profile_picture = $path;
+        $user->save();
+        }
+
+        return response()->json(['message' => 'Foto de perfil atualizada com sucesso!', 'profile_picture' => $path]);
     }
 
     public function update(UpdateUserRequest $request)
