@@ -104,7 +104,10 @@ class AuthController extends Controller
             return response()->json(['error' => true, 'message' => 'Usuário não autenticado.'], 401);
         }
 
-        return response()->json(['user' => $user]);
+        return response()->json([
+            'user' => $user,
+            'profile_picture' => $user->profile_picture ? asset("storage/{$user->profile_picture}") : null
+        ]);
     }
 
     public function updateProfilePicture(Request $request)
@@ -116,7 +119,6 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if ($request->hasFile('profile_picture')) {
-            // Excluir a imagem antiga, se existir
             if ($user->profile_picture) {
                 Storage::delete($user->profile_picture);
             }
@@ -126,7 +128,7 @@ class AuthController extends Controller
         $user->save();
         }
 
-        return response()->json(['message' => 'Foto de perfil atualizada com sucesso!', 'profile_picture' => $path]);
+        return response()->json(['message' => 'Foto de perfil atualizada com sucesso!', 'profile_picture' => $user->profile_picture]);
     }
 
     public function update(UpdateUserRequest $request)

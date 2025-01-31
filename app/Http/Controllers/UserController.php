@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class UserController extends Controller
@@ -20,10 +21,22 @@ class UserController extends Controller
     {
         return response()->json(User::all());
     }
+
+    public function show($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['error' => 'Usuário não encontrado'], 404);
+        }
+        return response()->json($user);
+    }
     
     public function create(UserRequest $request)
     {
         $data = $request->validated();
+
+        $data['password'] = Hash::make($data['password']);
 
         $user = User::create($data);
 

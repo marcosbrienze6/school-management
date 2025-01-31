@@ -15,6 +15,8 @@ Route::prefix('auth')->group(function () {
     Route::delete('/{id}', [AuthController::class, 'delete']);
     Route::post('/friend-request', [AuthController::class, 'friendRequest']);
     Route::get('/my-profile', [AuthController::class, 'myProfile']);
+    Route::post('/my-profile', [AuthController::class, 'updateProfilePicture']);
+
 });
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/password/reset-request', [AuthController::class, 'sendResetEmail']);
@@ -22,7 +24,9 @@ Route::prefix('auth')->group(function () {
 });
 Route::prefix('user')->group(function () {
     Route::post('/create', [UserController::class, 'create']);
+    Route::get('/{id}', [UserController::class, 'show']);
     Route::get('/', [UserController::class, 'index']);
+
 });
 
 
