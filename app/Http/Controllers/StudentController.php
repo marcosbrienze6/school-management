@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,20 +11,15 @@ use Illuminate\Support\Facades\Auth;
 class StudentController extends Controller
 {
     public function create(Request $request)
-{
-    $validated = $request->validate([
+    {
+        $data = $request->validate([
         'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:students,email',
-    ]);
+        ]);
 
-    $student = Student::create([
-        'name' => $validated['name'],
-        'email' => $validated['email'],
-        'user_id' => Auth::user(), 
-    ]);
+        $student = Student::create($data);
 
-    return response()->json($student, 201);
-}
+        return response()->json(['student' => $student]);
+    }
 
     public function getGrades($id)
     {

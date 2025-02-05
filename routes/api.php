@@ -18,12 +18,11 @@ Route::prefix('auth')->group(function () {
 
     Route::get('/my-profile', [AuthController::class, 'myProfile']);
     Route::post('/my-profile', [AuthController::class, 'updateProfilePicture']);
-    
-    Route::prefix('students')->group(function () {
-        Route::get('/{id}/grades', [StudentController::class, 'getGrades']);
-        Route::get('/{id}/attendance', [StudentController::class, 'getAttendance']);
-        Route::post('/', [StudentController::class, 'create']);
-    });
+});
+Route::prefix('students')->group(function () {
+    Route::get('/{id}/grades', [StudentController::class, 'getGrades']);
+    Route::get('/{id}/attendance', [StudentController::class, 'getAttendance']);
+    Route::post('/', [StudentController::class, 'create']);
 });
     Route::post('/password/reset-request', [AuthController::class, 'sendResetEmail']);
     Route::post('/password/reset', [AuthController::class, 'resetPassword']);

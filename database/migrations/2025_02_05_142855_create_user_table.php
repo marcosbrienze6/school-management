@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('user')->onDelete('cascade');
-            $table->integer('registration_number')->unique();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->integer('cpf')->unique();
+            $table->string('address');
+            $table->string('password');
+            $table->enum('role', ['student', 'teacher', 'admin']); 
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('user');
     }
 };

@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Student;
+use App\Models\Teacher;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
@@ -29,7 +30,6 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'cpf',
         'address',
-        'user_role_id',
     ];
 
     /**
@@ -57,12 +57,17 @@ class User extends Authenticatable implements JWTSubject
 
     public function isAdmin()
     {
-    return $this->user_role_id === 1; 
+    return $this->role === 'admin'; 
     }
 
     public function student()
     {
         return $this->hasOne(Student::class);
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class);
     }
 
     public function getJWTIdentifier()

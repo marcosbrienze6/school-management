@@ -30,7 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 $response['data'] = $exception->errors();
                 $response['message'] = 'Os dados fornecidos são inválidos.';
                 $statusCode = $exception->status;
-            } elseif (app()->isDebug()) {
+            } elseif (config('app.debug')) {
                 $response['file'] = $exception->getFile() ?? null;
                 $response['line'] = $exception->getLine() ?? null;
                 $response['trace'] = $exception->getTrace();
@@ -53,12 +53,5 @@ return Application::configure(basePath: dirname(__DIR__))
                     $response['message'] = 'Erro interno no servidor.';
                 }
             }
-
-            return new JsonResponse(
-                $response,
-                $statusCode,
-                $exception instanceof HttpException ? $exception->getHeaders() : [],
-                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
-            );
         });
     })->create();
