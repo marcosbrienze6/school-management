@@ -51,6 +51,7 @@ class UserController extends Controller
 
         Student::create([
             'user_id' => (int) $user->id,
+            'name' => $data['name'],
             'grade_module' => $data['grade_module'],
             'registration_number' => $data['registration_number'],
             'birth_date' => $data['birth_date'] ?? now(),

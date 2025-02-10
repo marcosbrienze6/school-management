@@ -17,8 +17,6 @@ class UserRoleSeeder extends Seeder
             ['role' => 'Director'],
             ['role' => 'Teacher'],
             ['role' => 'Student'],
-            ['role' => 'Parent'],
-            ['role' => 'Employee']
         ];
 
         foreach ($seeds as $seed) {

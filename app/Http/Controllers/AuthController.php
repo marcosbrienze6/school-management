@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PasswordMail;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Student;
+
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -103,33 +104,54 @@ class AuthController extends Controller
         if (!$user) {
             return response()->json(['error' => true, 'message' => 'Usuário não autenticado.'], 401);
         }
-
+    
+        $studentData = $user->student ? [
+            'grade_module' => $user->student->grade_module,
+            'registration_number' => $user->student->registration_number,
+            'birth_date' => $user->student->birth_date,
+        ] : null;
+    
         return response()->json([
-            'user' => $user,
-            'profile_picture' => $user->profile_picture ? asset("storage/{$user->profile_picture}") : null
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'cpf' => $user->cpf,
+                'role' => $user->role, 
+            ],
+            'profile_picture' => $user->profile_picture ? asset("storage/{$user->profile_picture}") : null,
+            'student_data' => $studentData, 
         ]);
     }
 
     public function updateProfilePicture(Request $request)
     {
-        $request->validate([
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
-        ]);
-
         $user = Auth::user();
-
-        if ($request->hasFile('profile_picture')) {
-            if ($user->profile_picture) {
-                Storage::delete($user->profile_picture);
-            }
-    
-        $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-        $user->profile_picture = $path;
-        $user->save();
+        if (!$user) {
+            return response()->json(['error' => true, 'message' => 'Usuário não autenticado.']);
         }
 
-        return response()->json(['message' => 'Foto de perfil atualizada com sucesso!', 'profile_picture' => $user->profile_picture]);
+    if (!$request->hasFile('profile_picture')) {
+        return response()->json(['error' => 'Nenhuma imagem foi enviada.']);
     }
+
+    $file = $request->file('profile_picture');
+
+    // Validação
+    $validated = $request->validate([
+        'profile_picture' => 'image|mimes:jpg,jpeg,png|max:2048', 
+    ]);
+
+    // Salvar no storage
+    $path = $file->store('profile_pictures', 'public');
+
+    // Atualizar o usuário com a nova foto
+    $user->profile_picture = $path;
+    $user->save();
+
+    return response()->json(['profile_picture' => asset("storage/$path")]);
+    }
+
 
     public function update(UpdateUserRequest $request)
     {
@@ -157,3 +179,6 @@ class AuthController extends Controller
         return response()->json(['success' => true, 'message' => 'Usuário deletado com sucesso.']);
     }
 }
+
+
+
