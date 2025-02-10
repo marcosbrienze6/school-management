@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('user');
             $table->string('name');
-            $table->integer('registration_number')->unique();
-            $table->enum('grade_module', ['1', '2', '3']);
+            $table->string('email');
+            $table->string('gender');
+            $table->string('address');
+            $table->string('phone_number');
             $table->date('birth_date');
             $table->timestamps();
         });
