@@ -40,34 +40,6 @@ class UserController extends Controller
         $data['password'] = Hash::make($data['password']);
         $user = User::create($data);
 
-        if ($data['role'] === 'student') {
-
-            if (Student::where('registration_number', $data['registration_number'])->exists()) {
-            return response()->json([
-                'error' => true,
-                'message' => 'Registration number already exists.'
-            ], 400);
-           }
-
-        Student::create([
-            'user_id' => (int) $user->id,
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'grade_module' => $data['grade_module'],
-            'registration_number' => $data['registration_number'],
-            'birth_date' => $data['birth_date'] ?? now(),
-        ]);
-        }
-
-        if ($data['role'] === 'teacher') {
-        Teacher::create([
-            'user_id' => $user->id,
-            'department' => $data['department'],
-            'grade_module' => $data['grade_module'],
-            'birth_date' => $data['birth_date'] ?? now(),
-        ]);
-        }
-
         return response()->json(['error' => false, 'user' => $user]);
     }
 

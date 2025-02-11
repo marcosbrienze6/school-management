@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('user');
             $table->string('name');
-            $table->string('email');
             $table->string('gender');
             $table->integer('registration_number');
             $table->string('address');
@@ -30,6 +29,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('student_complementary_information', function (Blueprint $table) {
+            $table->dropForeign(['student_id']);
+        });
         Schema::dropIfExists('student');
     }
 };

@@ -2,23 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StudentRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\Student;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
 class StudentController extends Controller
 {
-    public function create(Request $request)
+    public function create(StudentRequest $request)
     {
-        $data = $request->validate([
-        'name' => 'required|string|max:255',
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['error' => true, 'message' => 'Usuário não autenticado.'], 401);
+        }
+        $data = $request->validated();
+
+        $student = Student::create([
+            'role' => $data['role'],
+            'user_id' => auth('api')->id()
         ]);
 
-        $student = Student::create($data);
-
-        return response()->json(['student' => $student]);
+        return response()->json(['error' => false, 'message' => 'Aluno criado com sucesso!', 'aluno' => $student]);
+    
     }
 
     public function getGrades($id)

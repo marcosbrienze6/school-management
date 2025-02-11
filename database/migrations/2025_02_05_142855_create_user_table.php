@@ -13,12 +13,9 @@ return new class extends Migration
     {
         Schema::create('user', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('email')->unique();
             $table->bigInteger('cpf')->unique();
-            $table->string('address');
             $table->string('password');
-            $table->enum('role', ['student', 'teacher', 'admin']); 
             $table->softDeletes();
             $table->timestamps();
         });
@@ -29,6 +26,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('student', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+        });
         Schema::dropIfExists('user');
     }
 };
