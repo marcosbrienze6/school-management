@@ -6,8 +6,11 @@ use App\Http\Requests\StudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class StudentController extends Controller
 {
@@ -15,26 +18,46 @@ class StudentController extends Controller
     {
         $data = $request->validated();
         $user = Auth::user();
-        
-        $data['user_id'] = $user->id;
-        $user = Student::create($data);
 
-        return response()->json(['error' => false, 'user' => $user]);
-    }
-
-    public function update(UpdateStudentRequest $request)
-    {
-        $user = Auth::user();
         if (!$user) {
             return response()->json(['error' => true, 'message' => 'Usuário não autenticado.'], 401);
         }
+        
+        $data['user_id'] = $user->id;
+        $student = Student::create($data);
 
-        $user->update($request->validated());
+        $token = JWTAuth::fromUser($student);
+
+        return response()->json([
+        'error' => false,
+        'message' => 'Usuário criado e logado',
+        'user' => $student,
+        'access_token' => $token,
+        'token_type' => 'bearer' ]);
+    }
+
+    public function update(UpdateStudentRequest $request, $userId)
+    {
+        $student = Student::find($userId);
+
+        $student->update($request->validated());
 
         return response()->json([
         'error' => false,
         'message' => 'Usuário atualizado com sucesso.',
-        'user' => $user,
+        'student' => $student,
+        ]);
+    }
+
+    public function delete($userId)
+    {
+        $student = Student::find($userId);
+        
+        $student->delete();
+
+        return response()->json([
+        'error' => false,
+        'message' => 'Usuário deletado com sucesso.'
         ]);
     }
 

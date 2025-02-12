@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Student extends Model
+
+class Student extends Authenticatable implements JWTSubject
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $table = 'student';
 
@@ -19,13 +21,13 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function grades()
+    public function getJWTIdentifier()
     {
-        return $this->hasMany(StudentGrade::class);
+        return $this->getKey();
     }
 
-    public function attendance()
+    public function getJWTCustomClaims()
     {
-        return $this->hasMany(StudentAttendance::class);
+        return [];
     }
 }

@@ -23,13 +23,7 @@ class UpdateStudentRequest extends FormRequest
     {
         return [
             'name' => 'nullable|string|max:255',
-            'email' => 'nullable|string|email|max:255',
-            'password' => 'nullable|string|min:8',
-            // 'gender' => 'nullable|in:male,female',
-            'phone_number' => 'nullable|string',
-            'address' => 'nullable|string|max:255',
-            'role' => 'nullable|in:student',
-            'birth_date' => 'nullable|date',
+            
             ];
     }
 }
