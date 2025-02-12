@@ -22,7 +22,8 @@ Route::prefix('auth')->group(function () {
 Route::prefix('students')->group(function () {
     Route::get('/{id}/grades', [StudentController::class, 'getGrades']);
     Route::get('/{id}/attendance', [StudentController::class, 'getAttendance']);
-    Route::post('/', [StudentController::class, 'create']);
+    Route::post('/create', [StudentController::class, 'create']);
+    Route::put('/{id}', [StudentController::class, 'update']);
 });
     Route::post('/password/reset-request', [AuthController::class, 'sendResetEmail']);
     Route::post('/password/reset', [AuthController::class, 'resetPassword']);

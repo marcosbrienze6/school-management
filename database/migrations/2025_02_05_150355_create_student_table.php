@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('student', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('user');
+            $table->unsignedBigInteger('user_id')->constrained('user');
             $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
             $table->string('gender');
-            $table->integer('registration_number');
             $table->string('address');
             $table->string('phone_number');
             $table->date('birth_date');
@@ -29,9 +30,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('student_complementary_information', function (Blueprint $table) {
-            $table->dropForeign(['student_id']);
-        });
+        
         Schema::dropIfExists('student');
     }
 };
