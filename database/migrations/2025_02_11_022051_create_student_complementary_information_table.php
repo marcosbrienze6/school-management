@@ -17,7 +17,7 @@ return new class extends Migration
                 $table->foreignId('student_id')->constrained('student');
                 $table->foreignId('subject_id')->constrained('subject');
                 $table->integer('year');
-                $table->integer('semester');
+                // $table->integer('semester');
                 $table->float('attendance');
                 $table->float('avarege_grade');
                 $table->timestamps();

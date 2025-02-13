@@ -14,8 +14,16 @@ return new class extends Migration
         Schema::create('teacher', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('user');
-            $table->string('department');
-            $table->enum('year', ['module_1', 'module_2', 'module_3']);
+
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->string('gender');
+            $table->string('address');
+            $table->string('phone_number');
+
+            $table->date('date_of_hire');
+            // $table->string('subjects');
             $table->date('birth_date');
             $table->timestamps();
         });

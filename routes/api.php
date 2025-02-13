@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/testapi', function () {
@@ -21,10 +22,15 @@ Route::prefix('auth')->group(function () {
     Route::put('/students/{id}', [StudentController::class, 'update']);
     Route::delete('/students/{id}', [StudentController::class, 'delete']);
 
+    Route::prefix('teacher')->group(function () {
+        Route::post('/create', [TeacherController::class, 'create']);
+        Route::put('/{id}', [TeacherController::class, 'update']);
+        Route::delete('/{id}', [TeacherController::class, 'delete']);
+    });
 });
     Route::prefix('students')->group(function () {
-        Route::get('/{id}/grades', [StudentController::class, 'getGrades']);
-        Route::get('/{id}/attendance', [StudentController::class, 'getAttendance']);
+        // Route::get('/{id}/grades', [StudentController::class, 'getGrades']);
+        // Route::get('/{id}/attendance', [StudentController::class, 'getAttendance']);
         Route::post('/create', [StudentController::class, 'create']);
 });
     Route::post('/password/reset-request', [AuthController::class, 'sendResetEmail']);
