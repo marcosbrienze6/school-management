@@ -19,19 +19,20 @@ Route::prefix('auth')->group(function () {
 
     Route::get('/my-profile', [AuthController::class, 'myProfile']);
     Route::post('/my-profile', [AuthController::class, 'updateProfilePicture']);
-    Route::put('/students/{id}', [StudentController::class, 'update']);
-    Route::delete('/students/{id}', [StudentController::class, 'delete']);
 
     Route::prefix('teacher')->group(function () {
         Route::post('/create', [TeacherController::class, 'create']);
         Route::put('/{id}', [TeacherController::class, 'update']);
         Route::delete('/{id}', [TeacherController::class, 'delete']);
     });
-});
+
     Route::prefix('students')->group(function () {
+        Route::post('/create', [StudentController::class, 'create']);
+        Route::delete('/{id}', [StudentController::class, 'delete']);
+        Route::put('/{id}', [StudentController::class, 'update']);
         // Route::get('/{id}/grades', [StudentController::class, 'getGrades']);
         // Route::get('/{id}/attendance', [StudentController::class, 'getAttendance']);
-        Route::post('/create', [StudentController::class, 'create']);
+    });
 });
     Route::post('/password/reset-request', [AuthController::class, 'sendResetEmail']);
     Route::post('/password/reset', [AuthController::class, 'resetPassword']);

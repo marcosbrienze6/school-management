@@ -58,6 +58,19 @@ class StudentController extends Controller
         ]);
     }
 
+    public function addStudentToClass(StudentRequest $request, $studentId)
+    {
+        $student = Student::find($studentId);
+        $student = $request->validated();
+
+        $student = Student::create([
+            'name' => $request->name,
+            'class_id' => $request->class_id,
+        ]);
+
+        return response()->json(['message' => 'Aluno cadastrado com sucesso!', 'data' => $student]);
+    }
+
     public function getGrades($id)
     {
         $student = Student::with('grades.course')->findOrFail($id);
