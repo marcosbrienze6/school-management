@@ -28,6 +28,7 @@ Route::prefix('auth')->group(function () {
     });
 
     Route::prefix('classes')->group(function () {
+        Route::post('/create', [ClassController::class, 'createClass']);
         Route::post('/add', [ClassController::class, 'addStudent']);
     });
 

@@ -23,6 +23,7 @@ class ClassModel extends Model
 
     public function students()
     {
-        return $this->hasMany(Student::class);
+        return $this->belongsToMany(Student::class, 'class_student');
     }
+  
 }
