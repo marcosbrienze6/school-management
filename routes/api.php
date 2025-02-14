@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClassController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
@@ -24,6 +25,10 @@ Route::prefix('auth')->group(function () {
         Route::post('/create', [TeacherController::class, 'create']);
         Route::put('/{id}', [TeacherController::class, 'update']);
         Route::delete('/{id}', [TeacherController::class, 'delete']);
+    });
+
+    Route::prefix('classes')->group(function () {
+        Route::post('/add', [ClassController::class, 'addStudent']);
     });
 
     Route::prefix('students')->group(function () {

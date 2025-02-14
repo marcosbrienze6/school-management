@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('grades', function (Blueprint $table) {
             $table->id();
-            $table->string('1ºano');
-            $table->string('2ºano');
-            $table->string('3ºano');
+            $table->string('grade_year');
             $table->timestamps();
         });
     }
