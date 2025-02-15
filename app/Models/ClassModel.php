@@ -12,9 +12,9 @@ class ClassModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'classes'; // Nome da tabela no banco
+    protected $table = 'classes';
 
-    protected $fillable = ['name', 'grade_id'];
+    protected $fillable = ['name', 'student_id', 'quantity', 'grade_id'];
 
     public function grade()
     {

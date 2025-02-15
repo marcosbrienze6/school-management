@@ -53,11 +53,11 @@ return Application::configure(basePath: dirname(__DIR__))
                     $response['message'] = 'Erro interno no servidor.';
                 }
             }
-            // return new JsonResponse(
-            //     $response,
-            //     $statusCode,
-            //     $exception instanceof HttpException ? $exception->getHeaders() : [],
-            //     JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
-            // );
+            return new JsonResponse(
+                $response,
+                $statusCode,
+                $exception instanceof HttpException ? $exception->getHeaders() : [],
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            );
         });
     })->create();

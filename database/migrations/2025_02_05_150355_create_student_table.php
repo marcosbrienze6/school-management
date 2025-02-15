@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->foreignId('class_id')->constrained();
             $table->string('gender');
             $table->string('address');
             $table->string('phone_number');
@@ -31,7 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        
         Schema::dropIfExists('student');
     }
 };

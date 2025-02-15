@@ -28,7 +28,6 @@ class StudentRequest extends FormRequest
         'gender' => 'required|in:male,female',
         'phone_number' => 'nullable|string',
         'address' => 'nullable|string|max:255',
-        'class_id' => 'required|exists:classes,id',
         'birth_date' => 'nullable|date',
         ];
     }
