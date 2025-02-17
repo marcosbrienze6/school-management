@@ -15,40 +15,44 @@ class ClassController extends Controller
 {
     public function createClass(Request $request)
     {
-        
-    }
-
-    public function addStudent(Request $request)
-    {
         $data = $request->validate([
         'name' => 'required|string|max:255',
-        'student_id' => 'required|exists:student,id',
-        'quantity' => 'required|integer|min:1',
+        'student_id' => 'required|exists,id',
+        'grade_id' => 'required|exists:grades,id',
         ]);
-        
-        $$user = Auth::user();
-        $grade = Grades::firstOrCreate(['user_id' => $user->id]);
-        dd($user);
-        
-        $student = Student::findOrFail($data['student_id']);
-        $existingClass = ClassModel::where('cart_id', $cart->id)
-            ->where('student_id', $student->id)
-            ->first();
 
-            if ($existingClass) {
-                $existingClass->quantity += $validated['quantity'];
-                $existingClass->save();
-            } else {
-                ClassModel::create([
-                    'grade_id' => $grade->id,
-                    'student_id' => $student->id,
-                    'quantity' => $data['quantity'],
-                ]);
-            }    
+        $class = ClassModel::create([
+        'name' => $data['name'],
+        'student_id' => $data['student,id'],
+        'grade_id' => $data['grade_id'],
+        ]);
+
+        return response()->json([
+        'message' => 'Turma criada com sucesso',
+        'class' => $class
+        ]);
+    }
+
+    public function addStudentToClass(Request $request)
+    {
+        $data = $request->validate([
+        'class_id' => 'required|exists:classes,id',
+        'student_id' => 'required|exists:students,id',
+        ]);
+
+        $class = ClassModel::findOrFail($data['class_id']);
+        $student = Student::findOrFail($data['student_id']);
+
+        if ($class->students()->where('student_id', $student->id)->exists()) {
+            return response()->json(['message' => 'O aluno já está nesta turma.'], 400);
+        }
+
+        $class->students()->attach($student->id);
 
         return response()->json([
         'message' => 'Aluno adicionado à turma com sucesso',
-        'student' => $student    
+        'class' => $class,
+        'student' => $student
         ]);
     }
 }

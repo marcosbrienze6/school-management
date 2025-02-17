@@ -12,7 +12,7 @@ class Grades extends Model
 
     protected $table = 'grades';
 
-    protected $fillable = ['name'];
+    protected $fillable = ['grade_year'];
 
     public function classes()
     {
