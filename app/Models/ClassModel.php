@@ -14,7 +14,7 @@ class ClassModel extends Model
 
     protected $table = 'classes';
 
-    protected $fillable = ['name', 'student_id', 'quantity', 'grade_id'];
+    protected $fillable = ['name', 'grade_id'];
 
     public function grade()
     {
