@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\GradeController;
 use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,12 @@ Route::prefix('auth')->group(function () {
         Route::post('/create', [TeacherController::class, 'create']);
         Route::put('/{id}', [TeacherController::class, 'update']);
         Route::delete('/{id}', [TeacherController::class, 'delete']);
+    });
+
+    Route::prefix('grades')->group(function () {
+        Route::post('/create', [GradeController::class, 'create']);
+        Route::post('/add', [GradeController::class, 'addClass']);
+        Route::put('/{id}', [GradeController::class, 'update']);
     });
 
     Route::prefix('classes')->group(function () {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClassRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -9,21 +10,15 @@ use App\Models\ClassModel;
 use App\Models\Student;
 use App\Models\Grades;
 
-
-
 class ClassController extends Controller
 {
-    public function createClass(Request $request)
+    public function createClass(ClassRequest $request)
     {
-        $data = $request->validate([
-        'name' => 'required|string|max:255',
-        'student_id' => 'required|exists,id',
-        'grade_id' => 'required|exists:grades,id',
-        ]);
+        $data = $request->validated();
 
         $class = ClassModel::create([
         'name' => $data['name'],
-        'student_id' => $data['student,id'],
+        'student_id' => $data['student_id'],
         'grade_id' => $data['grade_id'],
         ]);
 

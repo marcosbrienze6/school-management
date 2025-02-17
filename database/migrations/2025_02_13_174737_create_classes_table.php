@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('grade_id')->constrained('grades');
+            $table->foreignId('student_id')->constrained('student');
+            $table->integer('quantity')->default(1);
             $table->timestamps();
         });
     }
