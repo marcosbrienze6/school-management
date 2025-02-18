@@ -33,12 +33,34 @@ class ClassController extends Controller
         $class = ClassModel::findOrFail($data['class_id']);
         $student = Student::findOrFail($data['student_id']);
 
-        $class = ClassStudent::create($data);
+        $existingRecord = ClassStudent::where('class_id', $class->id)
+        ->where('student_id', $student->id)
+        ->exists(); 
 
+        if ($existingRecord) {
+            return response()->json([
+            'error' => true,
+            'message' => 'Esse aluno já está registrado nesta turma.'
+            ], 400);
+        }
+        
+        $class = ClassStudent::create($data);
+        
         return response()->json([
         'message' => 'Aluno adicionado à turma com sucesso',
         'class' => $class,
         'student' => $student
+        ]);
+    }
+
+    public function removeStudent($studentId)
+    {
+        $student = ClassStudent::find($studentId);
+        $student->delete();
+
+        return response()->json([
+        'error' => false,
+        'message' => 'Aluno removido com sucesso.'
         ]);
     }
 }
