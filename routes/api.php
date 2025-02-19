@@ -44,6 +44,7 @@ Route::prefix('auth')->group(function () {
 
     Route::prefix('subjects')->group(function () {
         Route::post('/create', [SubjectController::class, 'createSubject']);
+        Route::post('/add', [SubjectController::class, 'addSubjectToClass']);
         Route::put('/{id}', [SubjectController::class, 'updateSubject']);
         Route::delete('/remove/{id}', [SubjectController::class, 'deleteSubject']);
     });    
